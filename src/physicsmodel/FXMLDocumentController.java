@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -51,7 +52,11 @@ public class FXMLDocumentController implements Initializable {
         slider.setTranslateX(425);
         slider.setTranslateY(625);
         box.rotateProperty().bind(slider.valueProperty());
-        root2.getChildren().addAll(box, slider);
+        PerspectiveCamera camera= new PerspectiveCamera();
+        camera.setFieldOfView(100);
+        camera.setLayoutX(200);
+        root2.getChildren().addAll(box, slider,camera);
+        
         stage.setScene(scene);
         stage.show();
         
