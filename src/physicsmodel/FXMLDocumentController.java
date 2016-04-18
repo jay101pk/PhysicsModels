@@ -12,9 +12,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point3D;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Box;
 import javafx.stage.Stage;
 
 /**
@@ -30,16 +35,30 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void handleButtonAction(ActionEvent event){
-        try{
-            Parent root2 = FXMLLoader.load(getClass().getResource("FXMLDocument1.fxml"));
+//        try{
+//            Parent root2 = FXMLLoader.load(getClass().getResource("FXMLDocument1.fxml"));
+        Group root2=new Group();
+        Scene scene = new Scene(root2,1000,1000);
+        scene.setFill(Color.MEDIUMBLUE);
         
-        Scene scene = new Scene(root2);
+        Box box = new Box(100,100,100);
+        box.setLayoutX(75);
+        box.setLayoutY(200);
+        Point3D point=new Point3D(100,150,50);
+        box.setRotationAxis(point);
+        Slider slider = new Slider(0, 360, 0);
+        slider.setBlockIncrement(1);
+        slider.setTranslateX(425);
+        slider.setTranslateY(625);
+        box.rotateProperty().bind(slider.valueProperty());
+        root2.getChildren().addAll(box, slider);
         stage.setScene(scene);
         stage.show();
-        }
-        catch(IOException error){
-            System.out.println("didnt work");
-        }
+        
+//        }
+//        catch(IOException error){
+//            System.out.println("didnt work");
+//        }
     }
     
     @FXML
