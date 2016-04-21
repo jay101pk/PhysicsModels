@@ -35,35 +35,12 @@ public class FXMLDocumentController implements Initializable {
     private Stage stage=new Stage();
     
     @FXML
-    private void handleButtonAction(ActionEvent event){
-//        try{
-//            Parent root2 = FXMLLoader.load(getClass().getResource("FXMLDocument1.fxml"));
-        Group root2=new Group();
-        Scene scene = new Scene(root2,1000,1000);
-        scene.setFill(Color.MEDIUMBLUE);
-        
-        Box box = new Box(100,100,100);
-        box.setLayoutX(75);
-        box.setLayoutY(200);
-        Point3D point=new Point3D(100,150,50);
-        box.setRotationAxis(point);
-        Slider slider = new Slider(0, 360, 0);
-        slider.setBlockIncrement(1);
-        slider.setTranslateX(425);
-        slider.setTranslateY(625);
-        box.rotateProperty().bind(slider.valueProperty());
-        PerspectiveCamera camera= new PerspectiveCamera();
-        camera.setFieldOfView(100);
-        camera.setLayoutX(200);
-        root2.getChildren().addAll(box, slider,camera);
-        
+    private void handleButtonAction(ActionEvent event) throws IOException{
+            Parent root2 = FXMLLoader.load(getClass().getResource("FieldGUI.fxml"));
+        Scene scene = new Scene(root2,100,100);
+//        
         stage.setScene(scene);
         stage.show();
-        
-//        }
-//        catch(IOException error){
-//            System.out.println("didnt work");
-//        }
     }
     
     @FXML
