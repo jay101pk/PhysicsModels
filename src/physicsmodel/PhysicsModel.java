@@ -25,7 +25,6 @@ public class PhysicsModel extends Application {
         
         stage.setScene(scene);
         stage.show();
-        System.out.println("hi");
     }
 
     /**
