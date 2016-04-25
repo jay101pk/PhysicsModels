@@ -6,6 +6,7 @@
 package physicsmodel;
 
 import java.util.Vector;
+import org.fxyz.geometry.Vector3D;
 
 /**
  *
@@ -15,6 +16,6 @@ public class Field {
     private Vector f;
     
     public Field(){
-        f.
+        Vector3D d= new Vector3D();
     }
 }

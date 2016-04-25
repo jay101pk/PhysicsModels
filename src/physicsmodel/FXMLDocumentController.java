@@ -37,7 +37,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void handleButtonAction(ActionEvent event) throws IOException{
             Parent root2 = FXMLLoader.load(getClass().getResource("FieldGUI.fxml"));
-        Scene scene = new Scene(root2,100,100);
+        Scene scene = new Scene(root2,1000,1000);
 //        
         stage.setScene(scene);
         stage.show();
