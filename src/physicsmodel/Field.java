@@ -5,6 +5,7 @@
  */
 package physicsmodel;
 
+import java.util.ArrayList;
 import java.util.Vector;
 import org.fxyz.geometry.Vector3D;
 
@@ -13,9 +14,16 @@ import org.fxyz.geometry.Vector3D;
  * @author logerquist3873
  */
 public class Field {
-    private Vector f;
+    private ArrayList<Charge> charges;
+    private Vector3D[][] field;
     
     public Field(){
-        Vector3D d= new Vector3D();
+        field=new Vector3D[11][11];
+        charges = new ArrayList();
+    }
+    
+    public void addCharge(Charge q){
+        charges.add(q);
+        
     }
 }
