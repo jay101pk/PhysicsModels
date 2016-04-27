@@ -29,6 +29,8 @@ public class FieldGUI implements Initializable{
     private void handleButtonAction(ActionEvent event){
         Charge q= new Charge(0,0,0,10);
         Field f= new Field();
+        f.addCharge(new Charge(1,1,0,10));
+        f.updateField();
 //        Group root2=new Group();
 //        Scene scene = new Scene(root2,1000,1000);
 //        Stage stage =new Stage();

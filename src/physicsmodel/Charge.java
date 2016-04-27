@@ -10,7 +10,7 @@ package physicsmodel;
  * @author logerquist3873
  */
 public class Charge {
-    public int x,y,z,q;
+    private int x,y,z,q;
     
     public Charge(int xc, int yc,int zc, int qa){
         x=xc;
@@ -18,4 +18,22 @@ public class Charge {
         z=zc;
         q=qa;
     }
+    
+    public int getX(){
+        return x;
+    }
+    
+    public int getY(){
+        return y;
+    }
+    
+    public int getZ(){
+        return z;
+    }
+    
+    public int getChargeAmount(){
+        return q;
+    }
+    
+    
 }
