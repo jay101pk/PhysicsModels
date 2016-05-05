@@ -46,13 +46,13 @@ public class Field {
                         double y=q.getY();
                         double z=q.getZ();
                         double c=q.getChargeAmount();
-                        System.out.println(c*(i-x)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2),3/2));
-                        System.out.println(c*(j-y)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2),3/2));
+//                        System.out.println(c*(i-x)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2),3/2));
+//                        System.out.println(c*(j-y)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2),3/2));
                         field[i][j].x += (Math.round(100*c*(i-x)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2),3/2))/100);
                         field[i][j].y += (Math.round(100*c*(j-y)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2),3/2))/100);
                         
                     }
-                    System.out.println(field[i][j]);
+//                    System.out.println(field[i][j]);
                 }
             }
         }
@@ -64,5 +64,33 @@ public class Field {
     
     public Vec2d[][] getfield(){
         return field;
+    }
+    
+    public double getAngle(int x,int y){
+        if(field[x][y].x>0&&field[x][y].y<0){
+            return Math.PI/2-Math.atan(field[x][y].y/field[x][y].x);
+        }
+        if(field[x][y].x>0&&field[x][y].y>0){
+            return Math.PI/2+Math.atan(field[x][y].y/field[x][y].x);
+        }
+        if(field[x][y].x<0&&field[x][y].y<0){
+            return 3*Math.PI/2-Math.atan(field[x][y].y/field[x][y].x);
+        }
+        if(field[x][y].x<0&&field[x][y].y>0){
+            return 3*Math.PI/2+Math.atan(field[x][y].y/field[x][y].x);
+        }
+        if(field[x][y].x==0&&field[x][y].y<0){
+            return 0;
+        }
+        if(field[x][y].x==0&&field[x][y].y>0){
+            return Math.PI;
+        }
+        if(field[x][y].x>0&&field[x][y].y==0){
+            return Math.PI/2;
+        }
+        if(field[x][y].x<0&&field[x][y].y==0){
+            return Math.PI*3/2;
+        }
+        return 0;
     }
 }

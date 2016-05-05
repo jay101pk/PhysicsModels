@@ -45,7 +45,7 @@ import org.fxyz.shapes.Torus;
 public class FieldGUI implements Initializable{
     @FXML
     private void handleButtonAction(ActionEvent event){
-        Charge q= new Charge(0,0,0,10);
+        Charge q= new Charge(0,0,0,Math.pow(1, -6));
         Field f= new Field();
         f.addCharge(new Charge(1,1,0,10));
         f.addCharge(new Charge(5,5,0,25));
@@ -55,7 +55,7 @@ public class FieldGUI implements Initializable{
         Stage stage =new Stage();
         scene.setFill(Color.BLACK);
         for(int i=0;i<f.getCharges().size();i++){
-            Sphere s =new Sphere(50);
+            Sphere s =new Sphere(f.getCharges().get(i).getChargeAmount());
             s.setMaterial(new PhongMaterial(Color.AQUA));
             s.setLayoutX(f.getCharges().get(i).getX()*100);
             s.setLayoutY((f.getCharges().get(i).getY())*100);
@@ -77,25 +77,27 @@ public class FieldGUI implements Initializable{
                 v.setLayoutY(j*100);
                 v.setTextFill(Color.WHEAT);
                 root2.getChildren().add(v);
-                Cylinder c =  new Cylinder(10,100);
-                c.setLayoutX(i*100);
-                c.setLayoutY(j*100);
+                double mag = Math.sqrt(Math.pow(temp[i][j].x,2)+Math.pow(temp[i][j].y,2))*5;
+                Cylinder c =  new Cylinder(10,mag);
+                
                 root2.getChildren().add(c);
 //                c.setRotationAxis(new Point3D((i+0.5)*100,(.5+j)*100,0));
 //                c.rotateProperty().bind(slider.valueProperty());
-                double theta = 90+180/Math.PI*Math.atan(temp[i][j].y/temp[i][j].x);
-                c.setRotate(theta);
+                double theta = f.getAngle(i, j);
+                System.out.println(theta);
+                c.setRotate(theta*180/Math.PI);
+                c.setLayoutX(i*100+Math.sin(theta)*mag/2);
+                c.setLayoutY(j*100+Math.cos(theta)*mag/2);
 //                c.setLayoutX(50*Math.cos(theta)+c.getLayoutX());
 //                c.setLayoutY(50*Math.sin(theta)+c.getLayoutY());
             }
         }
-        AdvancedCamera camera= new AdvancedCamera();
-        FPSController co=new FPSController();
-        camera.setController(co);
+//        AdvancedCamera camera= new AdvancedCamera();
+//        FPSController co=new FPSController();
+//        camera.setController(co);
 //        camera.setFieldOfView(100);
 //        camera.setLayoutX(200);
-        root2.getChildren().addAll(slider,camera);
-        
+//        root2.getChildren().addAll(slider);
         stage.setScene(scene);
         stage.show();
         
