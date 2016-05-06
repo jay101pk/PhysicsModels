@@ -6,6 +6,8 @@
 package physicsmodel;
 
 import com.sun.javafx.geom.Vec2d;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,19 +48,23 @@ public class FieldGUI implements Initializable{
     @FXML
     private void handleButtonAction(ActionEvent event){
         Charge q= new Charge(0,0,0,Math.pow(1, -6));
-        Field f= new Field();
-        f.addCharge(new Charge(1,1,0,10));
+        Field f= new Field(20,20);
+        f.addCharge(new Charge(15,15,0,50));
         f.addCharge(new Charge(5,5,0,25));
+        f.addCharge(new Charge(7,7,0,8));
         f.updateField();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Group root2=new Group();
-        Scene scene = new Scene(root2,1000,1000);
+        Scene scene = new Scene(root2,screenSize.width,screenSize.height);
         Stage stage =new Stage();
         scene.setFill(Color.BLACK);
+        double xfactor =scene.getWidth()/f.getfield().length;
+        double yfactor = scene.getHeight()/f.getfield()[0].length;
         for(int i=0;i<f.getCharges().size();i++){
             Sphere s =new Sphere(f.getCharges().get(i).getChargeAmount());
             s.setMaterial(new PhongMaterial(Color.AQUA));
-            s.setLayoutX(f.getCharges().get(i).getX()*100);
-            s.setLayoutY((f.getCharges().get(i).getY())*100);
+            s.setLayoutX(f.getCharges().get(i).getX()*xfactor);
+            s.setLayoutY((f.getCharges().get(i).getY())*yfactor);
             root2.getChildren().add(s);
         }
         Point3D point=new Point3D(500,500,0);
@@ -72,13 +78,18 @@ public class FieldGUI implements Initializable{
         ArrayList<Label> labels=new ArrayList<>();
         for(int i=0;i<temp.length;i++){
             for(int j=0;j<temp[0].length;j++){
-                Label v=new Label(temp[i][j].toString().substring(5));
-                v.setLayoutX(i*100);
-                v.setLayoutY(j*100);
-                v.setTextFill(Color.WHEAT);
-                root2.getChildren().add(v);
+//                Label v=new Label(temp[i][j].toString().substring(5));
+//                v.setLayoutX(i*100);
+//                v.setLayoutY(j*100);
+//                v.setTextFill(Color.WHEAT);
+//                root2.getChildren().add(v);
+                Sphere s =new Sphere(5);
+                s.setMaterial(new PhongMaterial(Color.GREEN));
+                s.setLayoutX(i*xfactor);
+                s.setLayoutY(j*yfactor);
+                root2.getChildren().add(s);
                 double mag = Math.sqrt(Math.pow(temp[i][j].x,2)+Math.pow(temp[i][j].y,2))*5;
-                Cylinder c =  new Cylinder(10,mag);
+                Cylinder c =  new Cylinder(2,mag);
                 
                 root2.getChildren().add(c);
 //                c.setRotationAxis(new Point3D((i+0.5)*100,(.5+j)*100,0));
@@ -86,13 +97,15 @@ public class FieldGUI implements Initializable{
                 double theta = f.getAngle(i, j);
                 System.out.println(theta);
                 c.setRotate(theta*180/Math.PI);
-                c.setLayoutX(i*100+Math.sin(theta)*mag/2);
-                c.setLayoutY(j*100+Math.cos(theta)*mag/2);
+                c.setLayoutX(i*xfactor+Math.sin(theta)*mag/2);
+                c.setLayoutY(j*yfactor-Math.cos(theta)*mag/2);
 //                c.setLayoutX(50*Math.cos(theta)+c.getLayoutX());
 //                c.setLayoutY(50*Math.sin(theta)+c.getLayoutY());
             }
         }
-//        AdvancedCamera camera= new AdvancedCamera();
+        AdvancedCamera camera= new AdvancedCamera();
+        camera.setRotate(30);
+        scene.setCamera(camera);
 //        FPSController co=new FPSController();
 //        camera.setController(co);
 //        camera.setFieldOfView(100);

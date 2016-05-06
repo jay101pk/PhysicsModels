@@ -20,8 +20,8 @@ public class Field {
     private Vec2d[][] field;
     public static final double[] ORIGIN={6,6,6};
     
-    public Field(){
-        field=new Vec2d[11][11];
+    public Field(int x,int y){
+        field=new Vec2d[x][y];
         charges = new ArrayList();
         
     }
@@ -67,30 +67,36 @@ public class Field {
     }
     
     public double getAngle(int x,int y){
-        if(field[x][y].x>0&&field[x][y].y<0){
-            return Math.PI/2-Math.atan(field[x][y].y/field[x][y].x);
-        }
-        if(field[x][y].x>0&&field[x][y].y>0){
-            return Math.PI/2+Math.atan(field[x][y].y/field[x][y].x);
-        }
-        if(field[x][y].x<0&&field[x][y].y<0){
-            return 3*Math.PI/2-Math.atan(field[x][y].y/field[x][y].x);
-        }
-        if(field[x][y].x<0&&field[x][y].y>0){
-            return 3*Math.PI/2+Math.atan(field[x][y].y/field[x][y].x);
-        }
+        double xa =Math.abs(field[x][y].x);
+        double ya =Math.abs(field[x][y].y);
         if(field[x][y].x==0&&field[x][y].y<0){
             return 0;
         }
-        if(field[x][y].x==0&&field[x][y].y>0){
-            return Math.PI;
+        if(field[x][y].x>0&&field[x][y].y<0){
+            return Math.atan(xa/ya);
         }
         if(field[x][y].x>0&&field[x][y].y==0){
             return Math.PI/2;
         }
+        if(field[x][y].x>0&&field[x][y].y>0){
+            return Math.PI-Math.atan(xa/ya);
+        }
+        if(field[x][y].x==0&&field[x][y].y>0){
+            return Math.PI;
+        }
+        if(field[x][y].x<0&&field[x][y].y>0){
+            return Math.PI+Math.atan(xa/ya);
+        }
         if(field[x][y].x<0&&field[x][y].y==0){
             return Math.PI*3/2;
         }
+        if(field[x][y].x<0&&field[x][y].y<0){
+            return 2*Math.PI-Math.atan(xa/ya);
+        }
+        
+        
+        
+        
         return 0;
     }
 }
