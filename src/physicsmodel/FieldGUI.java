@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point3D;
@@ -25,12 +26,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Material;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Sphere;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import org.fxyz.cameras.AdvancedCamera;
 import org.fxyz.cameras.controllers.FPSController;
@@ -63,12 +68,12 @@ public class FieldGUI implements Initializable{
         for(int i=0;i<f.getCharges().size();i++){
             Sphere s =new Sphere(f.getCharges().get(i).getChargeAmount());
             s.setMaterial(new PhongMaterial(Color.AQUA));
-            s.setLayoutX(f.getCharges().get(i).getX()*xfactor);
-            s.setLayoutY((f.getCharges().get(i).getY())*yfactor);
+            s.setTranslateX(f.getCharges().get(i).getX()*xfactor);
+            s.setTranslateY((f.getCharges().get(i).getY())*yfactor);
             root2.getChildren().add(s);
         }
         Point3D point=new Point3D(500,500,0);
-        Slider slider = new Slider(0, 360, 0);
+        Slider slider = new Slider(-1000, -2000, -1000);
         slider.setBlockIncrement(1);
         slider.setTranslateX(425);
         slider.setTranslateY(625);
@@ -85,9 +90,9 @@ public class FieldGUI implements Initializable{
 //                root2.getChildren().add(v);
                 Sphere s =new Sphere(5);
                 s.setMaterial(new PhongMaterial(Color.GREEN));
-                s.setLayoutX(i*xfactor);
-                s.setLayoutY(j*yfactor);
-                root2.getChildren().add(s);
+                s.setTranslateX(i*xfactor);
+                s.setTranslateY(j*yfactor);
+//                root2.getChildren().add(s);
                 double mag = Math.sqrt(Math.pow(temp[i][j].x,2)+Math.pow(temp[i][j].y,2))*5;
                 Cylinder c =  new Cylinder(2,mag);
                 
@@ -97,20 +102,45 @@ public class FieldGUI implements Initializable{
                 double theta = f.getAngle(i, j);
                 System.out.println(theta);
                 c.setRotate(theta*180/Math.PI);
-                c.setLayoutX(i*xfactor+Math.sin(theta)*mag/2);
-                c.setLayoutY(j*yfactor-Math.cos(theta)*mag/2);
+                c.setTranslateX(i*xfactor+Math.sin(theta)*mag/2);
+                c.setTranslateY(j*yfactor-Math.cos(theta)*mag/2);
+//                c.setTranslateZ(-200);
 //                c.setLayoutX(50*Math.cos(theta)+c.getLayoutX());
 //                c.setLayoutY(50*Math.sin(theta)+c.getLayoutY());
             }
         }
         AdvancedCamera camera= new AdvancedCamera();
-        camera.setRotate(30);
+//        camera.setRotate(30);
+        camera.setTranslateZ(-1000);
+        camera.setTranslateX(scene.getWidth()/2);
+        camera.setTranslateY(scene.getHeight()/2);
+        FPSController co=new FPSController();
+        camera.setController(co);
         scene.setCamera(camera);
-//        FPSController co=new FPSController();
-//        camera.setController(co);
+        camera.setRotationAxis(Rotate.Y_AXIS);
+        EventHandler z = new EventHandler<MouseEvent>() 
+        {
+            
+            @Override
+            public void handle(MouseEvent t) //this code runs whenver a spot is clicked
+            {
+                if(t.isPrimaryButtonDown()){
+//                    double x=camera.getTranslateX();
+//                    double y=camera.getTranslateZ();
+//                    camera.setTranslateX(x+10);
+//                    camera.setTranslateZ(y+10);
+                    camera.setRotate(camera.getRotate()+10);
+                }
+                else
+                    camera.setRotate(camera.getRotate()-10);
+            }
+            
+        };
+        scene.setOnMousePressed(z);
+        
 //        camera.setFieldOfView(100);
 //        camera.setLayoutX(200);
-//        root2.getChildren().addAll(slider);
+//        root2.getChildren().addAll(light,slider);
         stage.setScene(scene);
         stage.show();
         
