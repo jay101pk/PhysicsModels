@@ -31,6 +31,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -55,7 +57,8 @@ import org.fxyz.shapes.Torus;
  */
 
 public class FieldGUI implements Initializable{
-    Field f= new Field(20,20,20);
+    private Field f= new Field(20,20,20);
+    private int s =0;
     @FXML
     private TextField cText,xText,yText,zText;
     @FXML
@@ -130,25 +133,25 @@ public class FieldGUI implements Initializable{
         camera.setController(co);
         scene.setCamera(camera);
         camera.setRotationAxis(Rotate.Y_AXIS);
-        EventHandler z = new EventHandler<MouseEvent>() 
+        EventHandler z; 
+        z = new EventHandler<KeyEvent>() 
         {
             
             @Override
-            public void handle(MouseEvent t) //this code runs whenver a spot is clicked
+            public void handle(KeyEvent t) //this code runs whenver a spot is clicked
             {
-                if(t.isPrimaryButtonDown()){
-//                    double x=camera.getTranslateX();
-//                    double y=camera.getTranslateZ();
-//                    camera.setTranslateX(x+10);
-//                    camera.setTranslateZ(y+10);
-                    camera.setRotate(camera.getRotate()+10);
+                if(t.getCode().equals(KeyCode.RIGHT)){
+                    s=(s+10)%360;
                 }
                 else
-                    camera.setRotate(camera.getRotate()-10);
+                    s=(s+350)%360;
+                camera.setTranslateZ(-Math.cos(Math.PI/180*s)*1000);
+                camera.setTranslateX(Math.sin(s*Math.PI/180)*1000+scene.getWidth()/2);
+                camera.setRotate(-s);
             }
             
         };
-        scene.setOnMousePressed(z);
+        scene.setOnKeyPressed(z);
         
 //        camera.setFieldOfView(100);
 //        camera.setLayoutX(200);
