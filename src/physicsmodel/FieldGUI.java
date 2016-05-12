@@ -6,6 +6,7 @@
 package physicsmodel;
 
 import com.sun.javafx.geom.Vec2d;
+import com.sun.javafx.geom.Vec3d;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.IOException;
@@ -23,7 +24,10 @@ import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ListView.EditEvent;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
@@ -49,14 +53,21 @@ import org.fxyz.shapes.Torus;
  *
  * @author logerquist3873
  */
+
 public class FieldGUI implements Initializable{
+    Field f= new Field(20,20,20);
+    @FXML
+    private TextField cText,xText,yText,zText;
+    @FXML
+    private ListView charges;
     @FXML
     private void handleButtonAction(ActionEvent event){
         Charge q= new Charge(0,0,0,Math.pow(1, -6));
-        Field f= new Field(20,20);
-        f.addCharge(new Charge(15,15,0,50));
-        f.addCharge(new Charge(5,5,0,25));
-        f.addCharge(new Charge(7,7,0,8));
+        
+        
+//        f.addCharge(new Charge(15,15,0,50));
+//        f.addCharge(new Charge(5,5,0,25));
+//        f.addCharge(new Charge(7,7,0,8));
         f.updateField();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Group root2=new Group();
@@ -70,6 +81,7 @@ public class FieldGUI implements Initializable{
             s.setMaterial(new PhongMaterial(Color.AQUA));
             s.setTranslateX(f.getCharges().get(i).getX()*xfactor);
             s.setTranslateY((f.getCharges().get(i).getY())*yfactor);
+            s.setTranslateZ(f.getCharges().get(i).getZ()*100);
             root2.getChildren().add(s);
         }
         Point3D point=new Point3D(500,500,0);
@@ -79,7 +91,7 @@ public class FieldGUI implements Initializable{
         slider.setTranslateY(625);
         AmbientLight light=new AmbientLight();
         light.setColor(Color.WHITE);
-        Vec2d[][] temp=f.getfield();
+        Vec3d[][][] temp=f.getfield();
         ArrayList<Label> labels=new ArrayList<>();
         for(int i=0;i<temp.length;i++){
             for(int j=0;j<temp[0].length;j++){
@@ -93,14 +105,14 @@ public class FieldGUI implements Initializable{
                 s.setTranslateX(i*xfactor);
                 s.setTranslateY(j*yfactor);
 //                root2.getChildren().add(s);
-                double mag = Math.sqrt(Math.pow(temp[i][j].x,2)+Math.pow(temp[i][j].y,2))*5;
+                double mag = Math.sqrt(Math.pow(temp[i][j][0].x,2)+Math.pow(temp[i][j][0].y,2))*5;
                 Cylinder c =  new Cylinder(2,mag);
                 
                 root2.getChildren().add(c);
 //                c.setRotationAxis(new Point3D((i+0.5)*100,(.5+j)*100,0));
 //                c.rotateProperty().bind(slider.valueProperty());
                 double theta = f.getAngle(i, j);
-                System.out.println(theta);
+//                System.out.println(theta);
                 c.setRotate(theta*180/Math.PI);
                 c.setTranslateX(i*xfactor+Math.sin(theta)*mag/2);
                 c.setTranslateY(j*yfactor-Math.cos(theta)*mag/2);
@@ -145,7 +157,29 @@ public class FieldGUI implements Initializable{
         stage.show();
         
     }
+    @FXML
+    private void handleAddCharge(){
+        int x = Integer.parseInt(xText.getText());
+        int y = Integer.parseInt(yText.getText());
+        int z = Integer.parseInt(zText.getText());
+        double q = Integer.parseInt(cText.getText());
+        Charge c = new Charge(x,y,z,q);
+        f.addCharge(c);
+        charges.getItems().add(c);
+        charges.setEditable(true);
+        System.out.println(f.getCharges());
+        System.out.println(charges.getItems());
+    }
     
+    @FXML
+    private void handleRemoveCharge(EditEvent event){
+        System.out.println(event.getIndex());
+//        if(charges.getItems().size()>0){
+//            f.removeCharge(event.getIndex());
+//            charges.getItems().remove(event.getIndex());
+//        }
+        System.out.println(charges.getEditingIndex());
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO

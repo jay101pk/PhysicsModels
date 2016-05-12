@@ -7,10 +7,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="physicsmodel.FieldGUI">
+<AnchorPane id="AnchorPane" prefHeight="299.0" prefWidth="552.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="physicsmodel.FieldGUI">
     <children>
         <Button fx:id="button" layoutX="126" layoutY="90" onAction="#handleButtonAction" text="Click Me!" />
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
-      <Sphere layoutX="225.0" layoutY="63.0" radius="0.77" />
+      <Button layoutX="191.0" layoutY="144.0" mnemonicParsing="false" onAction="#handleAddCharge" text="Add Charge" />
+      <TextField layoutX="20.0" layoutY="125.0" promptText="x" fx:id="xText" />
+      <TextField fx:id="yText" layoutX="20.0" layoutY="157.0" promptText="y" />
+      <TextField fx:id="zText" layoutX="20.0" layoutY="194.0" promptText="z" />
+      <TextField fx:id="cText" layoutX="20.0" layoutY="230.0" promptText="q" />
+      <ListView fx:id="charges" layoutX="307.0" layoutY="50.0" onEditStart="#handleRemoveCharge" prefHeight="200.0" prefWidth="200.0" />
     </children>
 </AnchorPane>

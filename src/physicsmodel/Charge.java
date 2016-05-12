@@ -35,6 +35,9 @@ public class Charge {
     public double getChargeAmount(){
         return q;
     }
-    
+    @Override
+    public String toString(){
+        return "("+x+","+y+","+z+","+q+")";
+    }
     
 }
