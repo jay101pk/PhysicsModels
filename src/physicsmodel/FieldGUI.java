@@ -17,7 +17,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point3D;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -58,7 +57,7 @@ import org.fxyz.shapes.Torus;
 
 public class FieldGUI implements Initializable{
     private Field f= new Field(20,20,20);
-    private int s =0;
+    private int s =90,t=0,theta=0;
     @FXML
     private TextField cText,xText,yText,zText;
     @FXML
@@ -80,29 +79,31 @@ public class FieldGUI implements Initializable{
         double xfactor =scene.getWidth()/f.getfield().length;
         double yfactor = scene.getHeight()/f.getfield()[0].length;
         for(int i=0;i<f.getCharges().size();i++){
-            Sphere s =new Sphere(f.getCharges().get(i).getChargeAmount());
-            s.setMaterial(new PhongMaterial(Color.AQUA));
+            Sphere s =new Sphere(100);
+            Color c;
+            if(f.getCharges().get(i).getChargeAmount()>0)
+                c= Color.BLUE;
+            else
+                c=Color.RED; 
+            for(int o = 0; o<(Math.abs(f.getCharges().get(i).getChargeAmount()))/10;o++){
+                c=c.darker();
+            }
+            s.setMaterial(new PhongMaterial(c));
             s.setTranslateX(f.getCharges().get(i).getX()*xfactor);
             s.setTranslateY((f.getCharges().get(i).getY())*yfactor);
             s.setTranslateZ(f.getCharges().get(i).getZ()*100);
             root2.getChildren().add(s);
         }
-        Point3D point=new Point3D(500,500,0);
-        Slider slider = new Slider(-1000, -2000, -1000);
-        slider.setBlockIncrement(1);
-        slider.setTranslateX(425);
-        slider.setTranslateY(625);
-        AmbientLight light=new AmbientLight();
-        light.setColor(Color.WHITE);
+        Slider[] slider = new Slider[4];
+        slider[0]=new Slider(-1000+scene.getWidth()/2, 1000+scene.getWidth()/2, scene.getWidth()/2);
+        slider[1]=new Slider(-1000+scene.getHeight()/2, 1000+scene.getHeight()/2, scene.getHeight()/2);
+        slider[2]=new Slider(-1000, 1000, -1000);
+        slider[3]=new Slider(0, 360, 0);
+        TextField txt=new TextField();
         Vec3d[][][] temp=f.getfield();
         ArrayList<Label> labels=new ArrayList<>();
         for(int i=0;i<temp.length;i++){
             for(int j=0;j<temp[0].length;j++){
-//                Label v=new Label(temp[i][j].toString().substring(5));
-//                v.setLayoutX(i*100);
-//                v.setLayoutY(j*100);
-//                v.setTextFill(Color.WHEAT);
-//                root2.getChildren().add(v);
                 Sphere s =new Sphere(5);
                 s.setMaterial(new PhongMaterial(Color.GREEN));
                 s.setTranslateX(i*xfactor);
@@ -125,7 +126,6 @@ public class FieldGUI implements Initializable{
             }
         }
         AdvancedCamera camera= new AdvancedCamera();
-//        camera.setRotate(30);
         camera.setTranslateZ(-1000);
         camera.setTranslateX(scene.getWidth()/2);
         camera.setTranslateY(scene.getHeight()/2);
@@ -133,32 +133,81 @@ public class FieldGUI implements Initializable{
         camera.setController(co);
         scene.setCamera(camera);
         camera.setRotationAxis(Rotate.Y_AXIS);
+//        camera.translateXProperty().bind(slider[0].valueProperty());
+//        camera.translateYProperty().bind(slider[1].valueProperty());
+//        camera.translateZProperty().bind(slider[2].valueProperty());
+//        camera.rotateProperty().bind(slider[3].valueProperty());
         EventHandler z; 
         z = new EventHandler<KeyEvent>() 
         {
             
             @Override
-            public void handle(KeyEvent t) //this code runs whenver a spot is clicked
+            public void handle(KeyEvent k) //this code runs whenver a spot is clicked
             {
-                if(t.getCode().equals(KeyCode.RIGHT)){
-                    s=(s+10)%360;
+                if(k.getCode().equals(KeyCode.RIGHT)){
+                    t=(t+10)%360;
                 }
+                else if(k.getCode().equals(KeyCode.LEFT))
+                    t=(t+350)%360;
+                else if(k.getCode().equals(KeyCode.UP))
+                    s=(s+10)%180;
+                else if(k.getCode().equals(KeyCode.DOWN))
+                    s=(s+170)%180;
                 else
-                    s=(s+350)%360;
-                camera.setTranslateZ(-Math.cos(Math.PI/180*s)*1000);
-                camera.setTranslateX(Math.sin(s*Math.PI/180)*1000+scene.getWidth()/2);
-                camera.setRotate(-s);
+                    theta=theta+10;
+                camera.setTranslateZ(Math.sin(s*Math.PI/180)-Math.cos(Math.PI/180*t)*1000);
+                camera.setTranslateX(Math.sin(s*Math.PI/180)*Math.sin(t*Math.PI/180)*1000+scene.getWidth()/2);
+                camera.setTranslateY(1000*Math.cos(s*Math.PI/180)+scene.getHeight()/2);
+//                Vec3d vn=new Vec3d(0,0,0); 
+//                Vec3d v1=new Vec3d(-camera.getTranslateX()-scene.getWidth()/2,-camera.getTranslateY()-scene.getHeight/2,-camera.getTranslateZ());
+//                Vec3d v2=new Vec3d(0,1,0);
+//                vn.cross(v1,v2);
+//                System.out.println(vn);
+//                camera.setRotationAxis(new Point3D(vn.x,vn.y,vn.z));
+//                double thet = Math.acos(v1.dot(v2)/Math.sqrt(v1.dot(v1)/Math.sqrt(v2.dot(v2))));
+                camera.setRotate(-t);
             }
             
         };
         scene.setOnKeyPressed(z);
-        
-//        camera.setFieldOfView(100);
-//        camera.setLayoutX(200);
-//        root2.getChildren().addAll(light,slider);
+        z = new EventHandler<MouseEvent>() 
+        {
+            
+            @Override
+            public void handle(MouseEvent k) //this code runs whenver a spot is clicked
+            {
+                if (camera.getRotationAxis().equals(Rotate.Y_AXIS))
+                    camera.setRotationAxis(Rotate.Z_AXIS);
+                else
+                    camera.setRotationAxis(Rotate.Y_AXIS);
+            }
+            
+        };
+        camera.setRotate(yfactor);
+        scene.setOnMousePressed(z);
         stage.setScene(scene);
         stage.show();
         
+        slider[0].setBlockIncrement(1);
+        slider[0].setTranslateX(0);
+        slider[0].setTranslateY(0);
+        slider[1].setBlockIncrement(1);
+        slider[1].setTranslateX(0);
+        slider[1].setTranslateY(50);
+        slider[2].setBlockIncrement(1);
+        slider[2].setTranslateX(0);
+        slider[2].setTranslateY(100);
+        slider[3].setBlockIncrement(1);
+        slider[3].setTranslateX(0);
+        slider[3].setTranslateY(150);
+        Group root=new Group();
+        Scene scene1 = new Scene(root,200,200);
+        Stage stage1 =new Stage();
+        root.getChildren().addAll(slider);
+        stage1.setScene(scene1);
+        stage1.setX(0);
+        stage1.setY(0);
+//        stage1.show();
     }
     @FXML
     private void handleAddCharge(){
