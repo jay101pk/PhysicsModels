@@ -5,12 +5,8 @@
  */
 package physicsmodel;
 
-import com.sun.javafx.geom.Vec2d;
 import com.sun.javafx.geom.Vec3d;
 import java.util.ArrayList;
-import java.util.Vector;
-import javax.vecmath.Vector2d;
-import org.fxyz.geometry.Vector3D;
 
 /**
  *
@@ -77,29 +73,21 @@ public class Field {
     public double getAngleS(int x,int y,int z){
         double xa =Math.abs(field[x][y][z].x);
         double ya =Math.abs(field[x][y][z].y);
-        if(field[x][y][z].x==0&&field[x][y][z].y<0){
+        if(field[x][y][z].x==0&&field[x][y][z].y>0){
             return 0;
         }
-        if(field[x][y][z].x>0&&field[x][y][z].y<0){
-            return Math.atan(xa/ya);
-        }
-        if(field[x][y][z].x>0&&field[x][y][z].y==0){
-            return Math.PI/2;
-        }
-        if(field[x][y][z].x>0&&field[x][y][z].y>0){
-            return Math.PI-Math.atan(xa/ya);
-        }
-        if(field[x][y][z].x==0&&field[x][y][z].y>0){
+        if(field[x][y][z].x==0&&field[x][y][z].y<0){
             return Math.PI;
         }
-        if(field[x][y][z].x<0&&field[x][y][z].y>0){
-            return Math.PI+Math.atan(xa/ya);
+        if(field[x][y][z].y>0){
+            return Math.atan(xa/ya);
         }
-        if(field[x][y][z].x<0&&field[x][y][z].y==0){
-            return Math.PI*3/2;
+        if(field[x][y][z].y==0){
+            return Math.PI/2;
         }
-        if(field[x][y][z].x<0&&field[x][y][z].y<0){
-            return 2*Math.PI-Math.atan(xa/ya);
+        
+        if(field[x][y][z].y<0){
+            return Math.PI-Math.atan(xa/ya);
         }
         
         
@@ -107,32 +95,66 @@ public class Field {
         
         return 0;
     }
+//    public double getAngleT(int x,int y,int z){
+//        double ya =Math.abs(field[x][y][z].y);
+//        double za =Math.abs(field[x][y][z].z);
+//        if(field[x][y][z].y<0&&field[x][y][z].z==0){
+//            return 0;
+//        }
+//        if(field[x][y][z].y<0&&field[x][y][z].z<0){
+//            return Math.atan(za/ya);
+//        }
+//        if(field[x][y][z].y==0&&field[x][y][z].z<0){
+//            return Math.PI/2;
+//        }
+//        if(field[x][y][z].y>0&&field[x][y][z].z<0){
+//            return Math.PI-Math.atan(za/ya);
+//        }
+//        if(field[x][y][z].y>0&&field[x][y][z].z==0){
+//            return Math.PI;
+//        }
+//        if(field[x][y][z].y>0&&field[x][y][z].z>0){
+//            return Math.PI+Math.atan(za/ya);
+//        }
+//        if(field[x][y][z].y==0&&field[x][y][z].z>0){
+//            return Math.PI*3/2;
+//        }
+//        if(field[x][y][z].y<0&&field[x][y][z].z>0){
+//            return 2*Math.PI-Math.atan(za/ya);
+//        }
+//        
+//        
+//        
+//        
+//        return 0;
+//    }
+    
     public double getAngleT(int x,int y,int z){
         double xa =Math.abs(field[x][y][z].x);
-        double ya =Math.abs(field[x][y][z].z);
-        if(field[x][y][z].x==0&&field[x][y][z].z>0){
+        double za =Math.abs(field[x][y][z].z);
+        if(field[x][y][z].x<0&&field[x][y][z].z==0){
             return 0;
         }
-        if(field[x][y][z].x>0&&field[x][y][z].z>0){
-            return Math.atan(xa/ya);
+        if(field[x][y][z].x<0&&field[x][y][z].z>0){
+            return Math.atan(za/xa);
         }
-        if(field[x][y][z].x>0&&field[x][y][z].z==0){
+        if(field[x][y][z].x==0&&field[x][y][z].z>0){
             return Math.PI/2;
         }
-        if(field[x][y][z].x>0&&field[x][y][z].z<0){
-            return Math.PI-Math.atan(xa/ya);
+        if(field[x][y][z].x>0&&field[x][y][z].z>0){
+            return Math.PI-Math.atan(za/xa);
         }
-        if(field[x][y][z].x==0&&field[x][y][z].z<0){
+        if(field[x][y][z].x>0&&field[x][y][z].z==0){
             return Math.PI;
         }
-        if(field[x][y][z].x<0&&field[x][y][z].z<0){
-            return Math.PI+Math.atan(xa/ya);
+        if(field[x][y][z].x>0&&field[x][y][z].z<0){
+            return Math.PI+Math.atan(za/xa);
         }
-        if(field[x][y][z].x<0&&field[x][y][z].z==0){
+        if(field[x][y][z].x==0&&field[x][y][z].z<0){
             return Math.PI*3/2;
         }
-        if(field[x][y][z].x<0&&field[x][y][z].z>0){
-            return 2*Math.PI-Math.atan(xa/ya);
+        if(field[x][y][z].x<0&&field[x][y][z].z<0){
+            return 2*Math.PI-Math.atan(za/xa);
         }
         
         
