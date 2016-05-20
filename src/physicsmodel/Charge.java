@@ -13,10 +13,10 @@ public class Charge {
     private int x,y,z;
     private double q;
     
-    public Charge(int xc, int yc,int zc, double qa){
-        x=xc;
-        y=yc;
-        z=zc;
+    public Charge(int[] p, double qa){
+        x=p[0];
+        y=p[1];
+        z=p[2];
         q=qa;
     }
     
@@ -37,7 +37,7 @@ public class Charge {
     }
     @Override
     public String toString(){
-        return "("+x+","+y+","+z+","+q+")";
+        return "("+x+","+y+","+z+","+Math.round(q*Math.pow(10, 9))+"nc)";
     }
     
 }

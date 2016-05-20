@@ -8,6 +8,7 @@ package physicsmodel;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.net.URL;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -20,18 +21,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ListView.EditEvent;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javax.management.timer.Timer;
 import org.fxyz.cameras.AdvancedCamera;
-import org.fxyz.cameras.controllers.FPSController;
-import org.fxyz.shapes.composites.SurfacePlot;
-import com.sun.javafx.geom.Vec3d;
 
 /**
  *
@@ -47,7 +46,8 @@ public class FieldGUI implements Initializable{
     private ListView charges;
     @FXML
     private void handleButtonAction(ActionEvent event){
-        Charge q= new Charge(10,10,10,50);
+        int[] p ={10,10,10};
+        Charge q= new Charge(p,50*Math.pow(10, -9));
         f.addCharge(q);
         f.updateField();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -67,7 +67,8 @@ public class FieldGUI implements Initializable{
         Rotate ry=new Rotate(0,0,0,2000,Rotate.Y_AXIS);
         camera.getTransforms().add(rx);
         camera.getTransforms().add(ry);
-        camera.setNearClip(10);
+        camera.setNearClip(1500);
+//        camera.setFarClip(2500);
         camera.setRotate(0);
         EventHandler z; 
         z = new EventHandler<KeyEvent>() 
@@ -90,16 +91,16 @@ public class FieldGUI implements Initializable{
                         s=(s+355)%360;
                         break;
                     case W:
-                        camera.setTranslateZ(camera.getTranslateZ()+20);
+                        camera.setTranslateZ(camera.getTranslateZ()+100);
                         break;
                     case S:
-                        camera.setTranslateZ(camera.getTranslateZ()-20);
+                        camera.setTranslateZ(camera.getTranslateZ()-100);
                         break;
                     case D:
-                        camera.setTranslateX(camera.getTranslateX()+20);
+                        camera.setTranslateX(camera.getTranslateX()+100);
                         break;
                     case A:
-                        camera.setTranslateX(camera.getTranslateX()-20);
+                        camera.setTranslateX(camera.getTranslateX()-100);
                         break;
                     default:
                         break;
@@ -110,7 +111,7 @@ public class FieldGUI implements Initializable{
                 rx.setPivotZ(1000-camera.getTranslateZ());
                 ry.setAngle(t);
                 ry.setPivotX(1000-camera.getTranslateX());
-                ry.setPivotY(10000-camera.getTranslateY());
+                ry.setPivotY(1000-camera.getTranslateY());
                 ry.setPivotZ(1000-camera.getTranslateZ());
             }
             
@@ -179,6 +180,42 @@ public class FieldGUI implements Initializable{
 //        Stage stage2= new Stage();
 //        stage2.setScene(scene2);
 //        stage2.show();
+        EventHandler h; 
+        h = new EventHandler<MouseEvent>() 
+        {
+            
+            @Override
+            public void handle(MouseEvent k)
+            {
+                System.out.println(System.nanoTime()/1000000000);
+                System.out.println(System.currentTimeMillis()/1000);
+                Timer t= new Timer();
+                Clock c= new Clock();
+                
+            }
+            
+        };
+        scene.setOnMouseReleased(h);
+        for(int i=0;i<f.getCharges().size();i++){
+            Sphere s =new Sphere(25);
+            Color c;
+            if(f.getCharges().get(i).getChargeAmount()>0)
+                c= Color.BLUE;
+            else
+                c=Color.RED; 
+//            for(int o = 0; o<(Math.abs(f.getCharges().get(i).getChargeAmount()))/10;o++){
+//                c=c.darker();
+//            }
+            s.setMaterial(new PhongMaterial(c));
+            s.setTranslateX(f.getCharges().get(i).getX()*100);
+            s.setTranslateY((f.getCharges().get(i).getY())*100);
+            s.setTranslateZ(f.getCharges().get(i).getZ()*100);
+            root2.getChildren().add(s);
+        }
+        
+        
+        
+        stage.setScene(scene);
     }
     @FXML
     private void handleAddCharge(){
@@ -186,7 +223,8 @@ public class FieldGUI implements Initializable{
         int y = Integer.parseInt(yText.getText());
         int z = Integer.parseInt(zText.getText());
         double q = Integer.parseInt(cText.getText());
-        Charge c = new Charge(x-1,y-1,z-1,q);
+        int[] p={x,y,z};
+        Charge c = new Charge(p,q*Math.pow(10, -9));
         f.addCharge(c);
         charges.getItems().add(c);
         charges.setEditable(true);

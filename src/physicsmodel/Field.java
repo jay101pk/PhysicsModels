@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * @author logerquist3873
  */
 public class Field {
+    public final static double K = 8.9875517873681764*Math.pow(10, 9);  
     private ArrayList<Charge> charges;
     private Vec3d[][][] field;
     public static final double[] ORIGIN={6,6,6};
@@ -48,11 +49,9 @@ public class Field {
                             double y=q.getY();
                             double z=q.getZ();
                             double c=q.getChargeAmount();
-//                        System.out.println(c*(i-x)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2),3/2));
-//                        System.out.println(c*(j-y)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2),3/2));
-                            field[i][j][k].x += (Math.round(100*c*(i-x)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2)+Math.pow(k-z, 2),3/2))/100);
-                            field[i][j][k].y += (Math.round(100*c*(j-y)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2)+Math.pow(k-z, 2),3/2))/100);
-                            field[i][j][k].z += (Math.round(100*c*(k-z)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2)+Math.pow(k-z, 2),3/2))/100);
+                            field[i][j][k].x += (Math.round(K*c*(i-x)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2)+Math.pow(k-z, 2),3/2))/10);
+                            field[i][j][k].y += (Math.round(K*c*(j-y)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2)+Math.pow(k-z, 2),3/2))/10);
+                            field[i][j][k].z += (Math.round(K*c*(k-z)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2)+Math.pow(k-z, 2),3/2))/10);
                         
                         }
 //                    System.out.println(field[i][j]);
