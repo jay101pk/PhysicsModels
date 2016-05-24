@@ -168,44 +168,13 @@ public class FieldGUI implements Initializable{
                 mags[i][j]=50*(float)Math.sqrt(f.getfield()[i][j][0].dot(f.getfield()[i][j][0]));
             }
         }
-//        SurfacePlot sur=new SurfacePlot(mags,10,Color.BLUE,true,true);
-//        Scene scene2= new Scene(sur);
-//        AdvancedCamera cam=new AdvancedCamera();
-//        cam.setTranslateX(100);
-//        cam.setTranslateY(100);
-//        cam.setTranslateZ(-100);
-//        scene2.setCamera(cam);
-//        cam.setRotationAxis(Rotate.X_AXIS);
-//        cam.setRotate(30);
-//        Stage stage2= new Stage();
-//        stage2.setScene(scene2);
-//        stage2.show();
-        EventHandler h; 
-        h = new EventHandler<MouseEvent>() 
-        {
-            
-            @Override
-            public void handle(MouseEvent k)
-            {
-                System.out.println(System.nanoTime()/1000000000);
-                System.out.println(System.currentTimeMillis()/1000);
-                Timer t= new Timer();
-                Clock c= new Clock();
-                
-            }
-            
-        };
-        scene.setOnMouseReleased(h);
         for(int i=0;i<f.getCharges().size();i++){
             Sphere s =new Sphere(25);
             Color c;
             if(f.getCharges().get(i).getChargeAmount()>0)
                 c= Color.BLUE;
             else
-                c=Color.RED; 
-//            for(int o = 0; o<(Math.abs(f.getCharges().get(i).getChargeAmount()))/10;o++){
-//                c=c.darker();
-//            }
+                c=Color.RED;
             s.setMaterial(new PhongMaterial(c));
             s.setTranslateX(f.getCharges().get(i).getX()*100);
             s.setTranslateY((f.getCharges().get(i).getY())*100);
