@@ -6,10 +6,10 @@
 package physicsmodel;
 
 /**
- *
+ *  
  * @author logerquist3873
  */
-public class Charge {
+public class Charge {//purpose of this class is to hold info of charges
     private int x,y,z;
     private double q;
     

@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author logerquist3873
  */
-public class Field {
+public class Field {//this class creates and hold the info of an electric field created by charges
     public final static double K = 8.9875517873681764*Math.pow(10, 9);  
     private ArrayList<Charge> charges;
     private Vec3d[][][] field;
@@ -32,6 +32,8 @@ public class Field {
     }
     
     public void updateField(){
+    //main method of class
+    //goes through the entire region and makes vectors to represent the electric field at those given points
         for(int i=0;i<field.length;i++){
             for(int j=0;j<field[0].length;j++){
                 for(int k=0;k<field[0][0].length;k++){
@@ -52,7 +54,6 @@ public class Field {
                             field[i][j][k].z += (Math.round(K*c*(k-z)/Math.pow(Math.pow(i-x,2) + Math.pow(j-y,2)+Math.pow(k-z, 2),3/2))/10);
                         
                         }
-//                    System.out.println(field[i][j]);
                     }
                 }
             }
@@ -68,6 +69,9 @@ public class Field {
     }
     
     public double getAngleS(int x,int y,int z){
+        //returns the angle to rotate around the z axis
+        //angle is based off the -y axis and goes clockwise direction
+        //since im using 3d roatation, i only want to go from 0 to 180 or else i would double the roatation
         double xa =Math.abs(field[x][y][z].x);
         double ya =Math.abs(field[x][y][z].y);
         if(field[x][y][z].x==0&&field[x][y][z].y>0){
@@ -89,6 +93,9 @@ public class Field {
         return 0;
     }
     public double getAngleT(int x,int y,int z){
+        //returns the angle to rotate around the y axis
+        //angle is based off the +x axis and goes clockwise direction
+        //this angle can go from 0 to 360
         double xa =Math.abs(field[x][y][z].x);
         double za =Math.abs(field[x][y][z].z);
         if(field[x][y][z].x<0&&field[x][y][z].z==0){

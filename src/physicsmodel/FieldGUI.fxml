@@ -12,7 +12,7 @@
       <Button fx:id="button" layoutX="126" layoutY="90" onAction="#handleButtonAction" text="Create Field" />
       <Button fx:id="but" layoutX="126" layoutY="60" onAction="#handleClearField" text="Clear Field" />
       <Button layoutX="191.0" layoutY="144.0" mnemonicParsing="false" onAction="#handleAddCharge" text="Add Charge" />
-      <CheckBox fx:id="rot" layoutX="191" layoutY="170"/>
+      <CheckBox fx:id="rot" layoutX="191" layoutY="170" text="Auto Rotate?"/>
       <TextField layoutX="20.0" layoutY="125.0" promptText="x" fx:id="xText" />
       <TextField fx:id="yText" layoutX="20.0" layoutY="157.0" promptText="y" />
       <TextField fx:id="zText" layoutX="20.0" layoutY="194.0" promptText="z" />

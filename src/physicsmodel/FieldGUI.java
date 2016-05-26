@@ -9,6 +9,9 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,6 +26,7 @@ import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.fxyz.cameras.AdvancedCamera;
 
 /**
@@ -31,7 +35,8 @@ import org.fxyz.cameras.AdvancedCamera;
  */
 
 public class FieldGUI implements Initializable{
-    private Field f= new Field(20,20,20);
+    //this class is repsonsible for taking the field info and displaying it 3d
+    private Field f= new Field(19,19,19);
     private int s =0,t=0;
     @FXML
     private TextField cText,xText,yText,zText;
@@ -41,25 +46,33 @@ public class FieldGUI implements Initializable{
     private CheckBox rot;
     @FXML
     private void handleButtonAction(ActionEvent event){
+        //main method that is responsible for displaying the field vectors
         int[] p ={10,10,10};
         Charge q= new Charge(p,50*Math.pow(10, -9));
+        
         f.addCharge(q);
         f.updateField();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Group root2=new Group();
-        Scene scene = new Scene(root2,screenSize.width,screenSize.height);
-        Stage stage =new Stage();
+        Group root2=new Group();//root2 is where i put all the visual objects into to display on the screen
+        Scene scene = new Scene(root2,screenSize.width,screenSize.height);//Scene tells the window what to display
+        Stage stage =new Stage();//stage is the actual window
         scene.setFill(Color.BLACK);
-        AdvancedCamera camera= new AdvancedCamera();
+        AdvancedCamera camera= new AdvancedCamera();//camera is responsible for showing from various angles what is on the screen
         camera.setTranslateZ(-1000);
-        camera.setTranslateX(1000);
-        camera.setTranslateY(1000);
         scene.setCamera(camera);
         Rotate rx=new Rotate(0,0,0,2000,Rotate.X_AXIS);
         Rotate ry=new Rotate(0,0,0,2000,Rotate.Y_AXIS);
         camera.getTransforms().add(rx);
         camera.getTransforms().add(ry);
+        if(rot.isSelected()){
+            Timeline time=new Timeline();
+            time.getKeyFrames().addAll(new KeyFrame(Duration.ZERO,new KeyValue(ry.angleProperty(),0)),new KeyFrame(new Duration(50000.0),new KeyValue(ry.angleProperty(),360)));
+            time.setCycleCount(Timeline.INDEFINITE);
+            time.play();
+        }
         EventHandler z; 
+        //this event occurs whenever a key is pressed while on the screen
+        //camera rotates around the center of the field
         z = new EventHandler<KeyEvent>() 
         {
             @Override
@@ -94,12 +107,13 @@ public class FieldGUI implements Initializable{
                         break;
                 }
                 rx.setAngle(s);
-                rx.setPivotX(1000-camera.getTranslateX());
-                rx.setPivotY(1000-camera.getTranslateY());
+                rx.setPivotX(-camera.getTranslateX());
+                rx.setPivotY(-camera.getTranslateY());
                 rx.setPivotZ(1000-camera.getTranslateZ());
-                ry.setAngle(t);
-                ry.setPivotX(1000-camera.getTranslateX());
-                ry.setPivotY(1000-camera.getTranslateY());
+                if(!rot.isSelected())
+                    ry.setAngle(t);
+                ry.setPivotX(-camera.getTranslateX());
+                ry.setPivotY(-camera.getTranslateY());
                 ry.setPivotZ(1000-camera.getTranslateZ());
             }
             
@@ -113,8 +127,8 @@ public class FieldGUI implements Initializable{
             else
                 c=Color.RED;
             s.setMaterial(new PhongMaterial(c));
-            s.setTranslateX(f.getCharges().get(i).getX()*100);
-            s.setTranslateY((f.getCharges().get(i).getY())*100);
+            s.setTranslateX(f.getCharges().get(i).getX()*100-1000);
+            s.setTranslateY((f.getCharges().get(i).getY())*100-1000);
             s.setTranslateZ(f.getCharges().get(i).getZ()*100);
             root2.getChildren().add(s);
         }
@@ -131,13 +145,13 @@ public class FieldGUI implements Initializable{
                     c.getTransforms().addAll(oy,oz);
                     oz.setAngle(sigma*180/Math.PI);
                     oy.setAngle(theta*180/Math.PI);
-                    c.setTranslateX(i*100-mag/2*Math.sin(sigma)*Math.cos(theta));
-                    c.setTranslateY(j*100+mag/2*Math.cos(sigma));
+                    c.setTranslateX(i*100-mag/2*Math.sin(sigma)*Math.cos(theta)-1000);
+                    c.setTranslateY(j*100+mag/2*Math.cos(sigma)-1000);
                     c.setTranslateZ(k*100+mag/2*Math.sin(sigma)*Math.sin(theta));
                     Sphere s =new Sphere(2);
                     s.setMaterial(new PhongMaterial(Color.AQUA));
-                    s.setTranslateX(i*100-mag*Math.sin(sigma)*Math.cos(theta));
-                    s.setTranslateY(j*100+mag*Math.cos(sigma));
+                    s.setTranslateX(i*100-mag*Math.sin(sigma)*Math.cos(theta)-1000);
+                    s.setTranslateY(j*100+mag*Math.cos(sigma)-1000);
                     s.setTranslateZ(k*100+mag*Math.sin(sigma)*Math.sin(theta));
                     root2.getChildren().add(s);
                 }
@@ -156,10 +170,10 @@ public class FieldGUI implements Initializable{
         int[] p={x,y,z};
         Charge c = new Charge(p,q*Math.pow(10, -9));
         f.addCharge(c);
-        charges.getItems().add(c);
+        charges.getItems().setAll(f.getCharges());
         charges.setEditable(true);
-        System.out.println(f.getCharges());
-        System.out.println(charges.getItems());
+//        System.out.println(f.getCharges());
+//        System.out.println(charges.getItems());
     }
     
     @FXML
