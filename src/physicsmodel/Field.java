@@ -16,12 +16,10 @@ public class Field {
     public final static double K = 8.9875517873681764*Math.pow(10, 9);  
     private ArrayList<Charge> charges;
     private Vec3d[][][] field;
-    public static final double[] ORIGIN={6,6,6};
     
     public Field(int x,int y,int z){
         field=new Vec3d[x][y][z];
         charges = new ArrayList();
-        
     }
     
     public void addCharge(Charge q){
@@ -88,46 +86,8 @@ public class Field {
         if(field[x][y][z].y<0){
             return Math.PI-Math.atan(xa/ya);
         }
-        
-        
-        
-        
         return 0;
     }
-//    public double getAngleT(int x,int y,int z){
-//        double ya =Math.abs(field[x][y][z].y);
-//        double za =Math.abs(field[x][y][z].z);
-//        if(field[x][y][z].y<0&&field[x][y][z].z==0){
-//            return 0;
-//        }
-//        if(field[x][y][z].y<0&&field[x][y][z].z<0){
-//            return Math.atan(za/ya);
-//        }
-//        if(field[x][y][z].y==0&&field[x][y][z].z<0){
-//            return Math.PI/2;
-//        }
-//        if(field[x][y][z].y>0&&field[x][y][z].z<0){
-//            return Math.PI-Math.atan(za/ya);
-//        }
-//        if(field[x][y][z].y>0&&field[x][y][z].z==0){
-//            return Math.PI;
-//        }
-//        if(field[x][y][z].y>0&&field[x][y][z].z>0){
-//            return Math.PI+Math.atan(za/ya);
-//        }
-//        if(field[x][y][z].y==0&&field[x][y][z].z>0){
-//            return Math.PI*3/2;
-//        }
-//        if(field[x][y][z].y<0&&field[x][y][z].z>0){
-//            return 2*Math.PI-Math.atan(za/ya);
-//        }
-//        
-//        
-//        
-//        
-//        return 0;
-//    }
-    
     public double getAngleT(int x,int y,int z){
         double xa =Math.abs(field[x][y][z].x);
         double za =Math.abs(field[x][y][z].z);
@@ -155,10 +115,6 @@ public class Field {
         if(field[x][y][z].x<0&&field[x][y][z].z<0){
             return 2*Math.PI-Math.atan(za/xa);
         }
-        
-        
-        
-        
         return 0;
     }
 }
