@@ -47,10 +47,6 @@ public class FieldGUI implements Initializable{
     @FXML
     private void handleButtonAction(ActionEvent event){
         //main method that is responsible for displaying the field vectors
-        int[] p ={10,10,10};
-        Charge q= new Charge(p,50*Math.pow(10, -9));
-        
-        f.addCharge(q);
         f.updateField();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Group root2=new Group();//root2 is where i put all the visual objects into to display on the screen
@@ -60,7 +56,7 @@ public class FieldGUI implements Initializable{
         AdvancedCamera camera= new AdvancedCamera();//camera is responsible for showing from various angles what is on the screen
         camera.setTranslateZ(-1000);
         scene.setCamera(camera);
-        Rotate rx=new Rotate(0,0,0,2000,Rotate.X_AXIS);
+        Rotate rx=new Rotate(0,0,0,2000,Rotate.X_AXIS);//custom rotation transformations to rotate in multiple directions
         Rotate ry=new Rotate(0,0,0,2000,Rotate.Y_AXIS);
         camera.getTransforms().add(rx);
         camera.getTransforms().add(ry);
@@ -120,6 +116,7 @@ public class FieldGUI implements Initializable{
         };
         scene.setOnKeyPressed(z);
         for(int i=0;i<f.getCharges().size();i++){
+            //this loop creates a sphere where each charge is at 
             Sphere s =new Sphere(25);
             Color c;
             if(f.getCharges().get(i).getChargeAmount()>0)
@@ -135,20 +132,24 @@ public class FieldGUI implements Initializable{
         for(int i=0;i<f.getfield().length;i++){
             for(int j=0;j<f.getfield()[0].length;j++){
                 for(int k=0;k<f.getfield()[0][0].length;k++){
+                    //main loop in charge of making the line to represent the vector
+                    //biggest trouble was the angle to rotate the lines
                     double mag = Math.sqrt(f.getfield()[i][j][k].dot(f.getfield()[i][j][k]))*5;
                     Cylinder c =  new Cylinder(2,mag);
                     root2.getChildren().add(c);
-                    double theta = f.getAngleT(i, j,k);
-                    double sigma=f.getAngleS(i, j,k);
-                    Rotate oz=new Rotate(0,0,0,0,Rotate.Z_AXIS);
-                    Rotate oy=new Rotate(0,0,0,0,Rotate.Y_AXIS);
+                    double theta = f.getAngleT(i, j,k);//angle for the y axis rotation, in radians
+                    double sigma=f.getAngleS(i, j,k);//angle for the z axis rotation
+                    Rotate oz=new Rotate(0,0,0,0,Rotate.Z_AXIS);//this rotate transformation rotates the cyclinder about its center around the z axis
+                    Rotate oy=new Rotate(0,0,0,0,Rotate.Y_AXIS);//this rotate transformation rotates the cyclinder about its center around the y axis
                     c.getTransforms().addAll(oy,oz);
-                    oz.setAngle(sigma*180/Math.PI);
-                    oy.setAngle(theta*180/Math.PI);
+                    oz.setAngle(sigma*180/Math.PI);//this rotates around the z axis, setangle is in degrees
+                    oy.setAngle(theta*180/Math.PI);//this roates around the y axis, setangle is in degrees
+                    //most confusing part, cyclinders move based on their center points
+                    //I need to shift the cyclinders so the end of the cyclinder is where the center is initially
                     c.setTranslateX(i*100-mag/2*Math.sin(sigma)*Math.cos(theta)-1000);
                     c.setTranslateY(j*100+mag/2*Math.cos(sigma)-1000);
                     c.setTranslateZ(k*100+mag/2*Math.sin(sigma)*Math.sin(theta));
-                    Sphere s =new Sphere(2);
+                    Sphere s =new Sphere(2);//simple color tip to show the head of the vector
                     s.setMaterial(new PhongMaterial(Color.AQUA));
                     s.setTranslateX(i*100-mag*Math.sin(sigma)*Math.cos(theta)-1000);
                     s.setTranslateY(j*100+mag*Math.cos(sigma)-1000);
@@ -163,6 +164,7 @@ public class FieldGUI implements Initializable{
     }
     @FXML
     private void handleAddCharge(){
+        //adds a charge to the charge arraylist from the textfields
         int x = Integer.parseInt(xText.getText());
         int y = Integer.parseInt(yText.getText());
         int z = Integer.parseInt(zText.getText());
@@ -172,12 +174,11 @@ public class FieldGUI implements Initializable{
         f.addCharge(c);
         charges.getItems().setAll(f.getCharges());
         charges.setEditable(true);
-//        System.out.println(f.getCharges());
-//        System.out.println(charges.getItems());
     }
     
     @FXML
     private void handleClearField(){
+        //clears the field to start all over
         f=new Field(19,19,19);
     }
     @Override
