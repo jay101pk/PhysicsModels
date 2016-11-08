@@ -26,6 +26,7 @@ import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Sphere;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import org.fxyz.cameras.AdvancedCamera;
 
@@ -115,6 +116,16 @@ public class FieldGUI implements Initializable{
             
         };
         scene.setOnKeyPressed(z);
+        z = new EventHandler<WindowEvent>() 
+        {
+            @Override
+            public void handle(WindowEvent k)
+            {
+             s=0;
+             t=0;   
+            }
+        };
+        stage.setOnCloseRequest(z);
         for(int i=0;i<f.getCharges().size();i++){
             //this loop creates a sphere where each charge is at 
             Sphere s =new Sphere(25);

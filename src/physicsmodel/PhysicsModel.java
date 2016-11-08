@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 /**
@@ -19,10 +20,12 @@ public class PhysicsModel extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FieldGUI.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Models.fxml"));
         
         Scene scene = new Scene(root);
-        
+        ListView list = (ListView)root.getChildrenUnmodifiable().get(1);
+        list.getItems().add("Electric Field");
+        list.getItems().add("Magnetic Field");
         stage.setScene(scene);
         stage.show();
     }
