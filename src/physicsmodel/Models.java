@@ -25,7 +25,10 @@ public class Models {
     private void handleRun() throws IOException{
         Parent root=new Group();
         if(models.getSelectionModel().isSelected(0)){
-            root = FXMLLoader.load(getClass().getResource("FieldGUI.fxml"));
+            root = FXMLLoader.load(getClass().getResource("EFieldGUI.fxml"));
+        }
+        else if(models.getSelectionModel().isSelected(1)){
+            root = FXMLLoader.load(getClass().getResource("MFieldGUI.fxml"));
         }
         Scene scene = new Scene(root);
         Stage stage = new Stage();
