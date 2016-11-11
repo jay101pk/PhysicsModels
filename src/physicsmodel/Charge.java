@@ -5,6 +5,8 @@
  */
 package physicsmodel;
 
+import com.sun.javafx.geom.Vec3d;
+
 /**
  *  
  * @author logerquist3873
@@ -12,12 +14,14 @@ package physicsmodel;
 public class Charge {//purpose of this class is to hold info of charges
     private int x,y,z;
     private double q;
+    private Vec3d vel;
     
-    public Charge(int[] p, double qa){
+    public Charge(int[] p, double qa, Vec3d vel){
         x=p[0];
         y=p[1];
         z=p[2];
         q=qa;
+        this.vel=vel;
     }
     
     public int getX(){
@@ -34,6 +38,10 @@ public class Charge {//purpose of this class is to hold info of charges
     
     public double getChargeAmount(){
         return q;
+    }
+    
+    public Vec3d getVelocity(){
+        return vel;
     }
     @Override
     public String toString(){
